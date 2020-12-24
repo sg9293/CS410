@@ -1,0 +1,72 @@
+//Programmer: Shivam Gupta       Due Date: 10/29/2020
+//File: hw2.cpp
+//
+//Purpose: This driver file will t
+
+#include "hw2_functions.h"
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+#include <vector>
+#include <time.h>
+#include <sstream>
+
+using namespace std;
+
+int main() {
+  string rand_Say;
+  int t_lines_sayings, t_lines_cret, rand_num;
+  vector<string> s_lines;
+  vector<creature> cret_List, diff_Cards, stackable_Cards;
+  creature test;
+
+  srand(37);
+
+  t_lines_sayings = number_of_lines("Sayings.dat");
+  s_lines = read_File("Sayings.dat");
+  cret_List = read_Creature();
+  t_lines_cret = cret_List.size();
+
+  for(int i = 0; i < 150; i++) {
+    rand_num = rand() % t_lines_cret;
+    test = cret_List[rand_num];
+    
+    if(isDiff(test, diff_Cards)) {
+      diff_Cards.push_back(test);
+    }
+
+    if(isStackable(test, stackable_Cards)) {
+      stackable_Cards.push_back(test);
+    }
+    
+    cout<<test.name<<": ";
+
+    
+    rand_num = rand() % t_lines_sayings;
+    cout<<rand_Saying(s_lines, rand_num)<<endl;
+
+    if(diff_Cards.size() >= 14) {
+      cout<<endl<<"Leaveature requirement completed via different cards"<<endl<<endl;
+      cout<<"Krusty: Hey GateKeeper, I have following cards:"<<endl;
+      for(auto i = diff_Cards.begin(); i != diff_Cards.end(); i++) {
+	cout<<(*i).name<<endl;
+      }
+      goodbye();
+      break;
+    }
+
+    if(stackable_Cards.size() >= 6) {
+      cout<<endl<<"Leaveature requirement complete via stackable cards"<<endl<<endl;
+      cout<<"Krusty: Hey GateKeeper, I have following cards:"<<endl;
+      for(auto i = stackable_Cards.begin(); i != stackable_Cards.end(); i++) {
+	cout<<(*i).name<<"  "<<(*i).dim_X<<" X "<<(*i).dim_Y<<endl;
+      }
+      goodbye();
+      break;
+    }
+  }
+  
+  return 0;
+}
